@@ -13,20 +13,20 @@ I've looked at the source code for budgie-desktop, and to implement in valac, c 
 
 ## Install
 ```
-npm install -g budgie-launcher-switcher
+npm install -g budgie-launcher-super
 ```
 ## API
 ```bash
 # Super + 1
-budgie-launcher-switcher 1
+budgie-launcher-super 1
 # Super + 2
-budgie-launcher-switcher 2
+budgie-launcher-super 2
 # Super + 3
-budgie-launcher-switcher 3
+budgie-launcher-super 3
 ```
 
 ### --launch
 Launch the task again despite window being open, handy to open an a new instance of `window 1` i've linked to `Shift + Super + 1`
 ```bash
-budgie-launcher-switcher --launch 1
+budgie-launcher-super --launch 1
 ```
