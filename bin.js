@@ -1,6 +1,7 @@
 #!/usr/bin/env node
+const path = require('path')
 
-const main = require('./index.js')
+const main = require(path.join(__dirname, '/index.js'))
 let superNumber = Number(process.argv[process.argv.length - 1])
 let bLaunch = process.argv[process.argv.length - 2] === '--launch'
 
