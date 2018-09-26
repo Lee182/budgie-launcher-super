@@ -190,6 +190,7 @@ const main = async ({
     const window = aWindowsSorted[superIndex][windowIndex]
     await sh(`wmctrl -ia ${window.hexWID}`)
   }
+  process.exit()
 }
 
 module.exports = main
