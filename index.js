@@ -3,6 +3,11 @@ const number2str = require('number2str')
 const sh = require('shell-exec')
 const ps = require('ps')
 const awaity = require('awaity')
+const wait = (ms) => {
+  return new Promise(resolve => {
+    setTimeout(resolve, ms)
+  })
+}
 
 const appPath = '/usr/share/applications/'
 const ignoreCommand = new Set(['budgie-panel', 'budgie-helper'])
@@ -31,12 +36,7 @@ const launch = async (desktopName) => {
   if (!desktopExits) {
     throw Error('Could not find path: ' + desktopName)
   }
-  try {
-    await sh(`gtk-launch ${desktopName}`)
-  } catch (err) {
-
-  }
-
+  await sh(`gtk-launch ${desktopName}`)
   // const tmpName = `launcher-${number2str.random(6)}.desktop`
   // const filePath = `${process.env.HOME}/.local/share/applications/${tmpName}`
   // const pathExists = await fs.pathExists(filePath)
@@ -44,11 +44,12 @@ const launch = async (desktopName) => {
   //   return launch(desktopName)
   // }
 
-  // await fs.copy(desktopPath, filePath)
+  // await fs.copy(`${appPath}${desktopName}`, filePath)
   // const rmTmp = () => {
   //   fs.unlink(filePath)
   // }
   // sh(`gtk-launch ${tmpName}`).then(rmTmp, rmTmp)
+  // await wait(200)
 }
 
 const getApplictaionsExecPath = async () => {
@@ -167,9 +168,9 @@ const main = async ({
   })
   let superIndex = superNumber - 1
   const notLaunched = aWindowsSorted[superIndex] === undefined
-  if (pinned[superIndex] !== undefined && (bLaunch || notLaunched)) {
-    await launch(pinned[superIndex])
+  if (bIncrementWindowIndex && pinned[superIndex] !== undefined && (bLaunch || notLaunched)) {
     windowIndex = notLaunched ? 0 : aWindowsSorted[superIndex].length
+    await launch(pinned[superIndex])
     await main({
       superNumber,
       bLaunch: false,
