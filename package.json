@@ -1,0 +1,41 @@
+{
+  "name": "budgie-launcher-super",
+  "version": "1.0.1",
+  "description": "Because C+ and Vala is hard for me. I want to create super+1 navigation shortcuts which will either launch if none open, or switch to the next window",
+  "main": "index.js",
+  "bin": {
+    "budgie-launcher-switcher": "index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lee182/budgie-launcher-super.git"
+  },
+  "keywords": [
+    "budgie",
+    "launcher"
+  ],
+  "author": "Jonathan T L Lee",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lee182/budgie-launcher-super/issues"
+  },
+  "homepage": "https://github.com/Lee182/budgie-launcher-super#readme",
+  "dependencies": {
+    "awaity": "^1.0.0",
+    "fs-extra": "^7.0.0",
+    "number2str": "github:Lee182/number2str",
+    "ps": "^1.0.0",
+    "shell-exec": "^1.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^5.6.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0"
+  }
+}
