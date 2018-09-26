@@ -36,7 +36,8 @@ const launch = async (desktopName) => {
   if (!desktopExits) {
     throw Error('Could not find path: ' + desktopName)
   }
-  await sh(`gtk-launch ${desktopName}`)
+  sh(`gtk-launch ${desktopName}`, { detached: true })
+  await wait(200)
   // const tmpName = `launcher-${number2str.random(6)}.desktop`
   // const filePath = `${process.env.HOME}/.local/share/applications/${tmpName}`
   // const pathExists = await fs.pathExists(filePath)
