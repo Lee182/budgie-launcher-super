@@ -1,6 +1,6 @@
 {
   "name": "budgie-launcher-super",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Because C+ and Vala is hard for me. I want to create super+1 navigation shortcuts which will either launch if none open, or switch to the next window",
   "main": "index.js",
   "bin": {
@@ -26,7 +26,6 @@
   "dependencies": {
     "awaity": "^1.0.0",
     "fs-extra": "^7.0.0",
-    "number2str": "github:Lee182/number2str",
     "ps": "^1.0.0",
     "shell-exec": "^1.0.2"
   },

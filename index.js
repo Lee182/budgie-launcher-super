@@ -1,5 +1,4 @@
 const fs = require('fs-extra')
-const number2str = require('number2str')
 const sh = require('shell-exec')
 const ps = require('ps')
 const awaity = require('awaity')
@@ -10,6 +9,7 @@ const wait = (ms) => {
 }
 
 const appPath = '/usr/share/applications/'
+const launcherDesktopCache = `${process.env.HOME}/.budgie-launcher-super`
 const ignoreCommand = new Set(['budgie-panel', 'budgie-helper'])
 
 const formatCommand = (s) => {
@@ -53,7 +53,15 @@ const launch = async (desktopName) => {
   // await wait(200)
 }
 
-const getApplictaionsExecPath = async () => {
+const getApplictaionsExecPath = async (bReCache) => {
+  try {
+    if (!bReCache) {
+      const o = await fs.readJSON(launcherDesktopCache)
+      return o
+    }
+  } catch (err) {
+
+  }
   const files = await fs.readdir(appPath)
   const apps = files.filter(s => s.match(/\.desktop$/) !== null)
   const o = {
@@ -81,6 +89,7 @@ const getApplictaionsExecPath = async () => {
     },
     12
   )
+  await fs.writeJSON(launcherDesktopCache, o)
   return o
 }
 
@@ -119,6 +128,7 @@ const main = async ({
   windowIndex = 0,
   bLaunch = false,
   bIncrementWindowIndex = true,
+  bReCache = false,
   attemptIndex = 0
 }) => {
   if (attemptIndex > 2) {
@@ -132,13 +142,25 @@ const main = async ({
   ] = await awaity.map([
     getPinned(),
     getWindows(),
-    getApplictaionsExecPath(),
+    getApplictaionsExecPath(bReCache),
     sh(`xdotool getactivewindow`)
   ])
   const activeWID = Number(sh2.stdout.trim())
+  let foundAllCommands = true
   const pinnedAsCommands = pinned.map((sDesktop) => {
+    foundAllCommands = foundAllCommands && execPaths.DesktopCommand[sDesktop]
     return execPaths.DesktopCommand[sDesktop]
   })
+  if (!foundAllCommands && !bReCache) {
+    return main({
+      superNumber,
+      windowIndex,
+      bLaunch,
+      bIncrementWindowIndex,
+      bReCache: true,
+      attemptIndex: attemptIndex + 1
+    })
+  }
   const pinnedIndex = pinnedAsCommands.reduce((o, sCommand, i, arr) => {
     o[sCommand] = i
     return o
@@ -151,12 +173,12 @@ const main = async ({
     window.active = window.wid === activeWID
     let index = pinnedIndex[window.command]
     if (index === undefined) {
-      index = pinnedAsCommands.length - 1
+      index = pinnedAsCommands.length
       while (index < aWindowsSorted.length) {
-        index++
         if (Array.isArray(aWindowsSorted[index]) && aWindowsSorted[index][0].command === window.command) {
           break
         }
+        index++
       }
     }
     if (!aWindowsSorted[index]) {
@@ -172,14 +194,13 @@ const main = async ({
   if (bIncrementWindowIndex && pinned[superIndex] !== undefined && (bLaunch || notLaunched)) {
     windowIndex = notLaunched ? 0 : aWindowsSorted[superIndex].length
     await launch(pinned[superIndex])
-    await main({
+    return main({
       superNumber,
       bLaunch: false,
       bIncrementWindowIndex: false,
       attemptIndex: attemptIndex + 1,
       windowIndex
     })
-    return
   }
 
   if (bIncrementWindowIndex && activeIndex[0] === superIndex) {
@@ -193,4 +214,5 @@ const main = async ({
   process.exit()
 }
 
+main({ superNumber: 4 })
 module.exports = main
