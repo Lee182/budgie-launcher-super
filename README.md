@@ -1,8 +1,8 @@
 # budgie-launcher-super
 ## idea/why
-Basically i needed a command to switch tasks, given i'm used to the same functionality with windows. me tones more productive than tabbing.
+A simple script to switch tasks using `super + 1` number keys, the same feature exists with other desktops like windows and unity, this adds it to budgie desktop.
 
-Its simple switch to or launch window from tasklist by using super shortcuts
+Example shortcut mappings
 ```
 Super + 1 : windows 1
 Super + 2 : windows 2
@@ -17,12 +17,10 @@ npm install -g budgie-launcher-super
 ```
 ## API
 ```bash
-# Super + 1
-budgie-launcher-super 1
-# Super + 2
-budgie-launcher-super 2
-# Super + 3
-budgie-launcher-super 3
+# key bindings setup in keyboard shortcuts
+budgie-launcher-super 1 # Super + 1
+budgie-launcher-super 2 # Super + 2
+budgie-launcher-super 3 # Super + 3
 ```
 
 ### --launch

@@ -1,7 +1,7 @@
 {
   "name": "budgie-launcher-super",
-  "version": "1.0.7",
-  "description": "Because C+ and Vala is hard for me. I want to create super+1 navigation shortcuts which will either launch if none open, or switch to the next window",
+  "version": "1.0.8",
+  "description": "A simple script to switch tasks using `super + 1` number keys, the same feature exists with other desktops like windows and unity, this adds it to budgie desktop.",
   "main": "index.js",
   "bin": {
     "budgie-launcher-super": "bin/budgie-launcher-super.js"
