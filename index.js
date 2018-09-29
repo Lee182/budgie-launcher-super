@@ -214,5 +214,4 @@ const main = async ({
   process.exit()
 }
 
-main({ superNumber: 4 })
 module.exports = main
