@@ -124,14 +124,14 @@ const getWindows = async () => {
 }
 
 const main = async ({
-  superNumber = 3,
+  superNumber = 0,
   windowIndex = 0,
   bLaunch = false,
   bIncrementWindowIndex = true,
   bReCache = false,
   attemptIndex = 0
 }) => {
-  if (attemptIndex > 2) {
+  if (attemptIndex > 2 || superNumber <= 0) {
     return
   }
   const [
