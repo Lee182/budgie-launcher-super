@@ -2,6 +2,7 @@
 ## idea/why
 A simple script to switch tasks using `super + 1` number keys, the same feature exists with other desktops like windows and unity, this adds it to budgie desktop.
 
+
 Example shortcut mappings
 ```
 Super + 1 : windows 1
@@ -15,6 +16,10 @@ I've looked at the source code for budgie-desktop, and to implement in valac, c 
 ```
 npm install -g budgie-launcher-super
 ```
+### System Dependcies
+`dconf, gtk-launch, xdotool, wmctrl`
+I've also made a AUR package at https://aur.archlinux.org/packages/nodejs-budgie-launcher-super/
+
 ## API
 ```bash
 # key bindings setup in keyboard shortcuts
@@ -27,4 +32,10 @@ budgie-launcher-super 3 # Super + 3
 Launch the task again despite window being open, handy to open an a new instance of `window 1` i've linked to `Shift + Super + 1`
 ```bash
 budgie-launcher-super --launch 1
+```
+
+### command name
+You can use an command name to switch to or launch that instance
+```bash
+budgie-launcher-super gnome-terminal
 ```

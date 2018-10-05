@@ -26,9 +26,13 @@ const getPinned = async () => {
   const panelId = sh1.stdout.trim()
   const sh2 = await sh(`dconf read ${path}${panelId}pinned-launchers`)
 
-  // eslint-disable-next-line
-  const aPanel = Function(`"use strict";return (${sh2.stdout.trim()})`)()
-  return aPanel
+  try {
+    return JSON.parse(sh2.stdout.trim().replace(/'/g, '"'))
+  } catch (err) {
+    console.log(sh2.stdout)
+    console.error(sh2.stderr)
+    return []
+  }
 }
 
 const launch = async (desktopName) => {
