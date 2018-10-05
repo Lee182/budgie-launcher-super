@@ -36,7 +36,7 @@ const launch = async (desktopName) => {
   if (!desktopExits) {
     throw Error('Could not find path: ' + desktopName)
   }
-  sh(`gtk-launch ${desktopName}`, { detached: true })
+  await sh(`gtk-launch ${desktopName}`, { detached: true })
   await wait(200)
   // const tmpName = `launcher-${number2str.random(6)}.desktop`
   // const filePath = `${process.env.HOME}/.local/share/applications/${tmpName}`
@@ -84,7 +84,7 @@ const getApplictaionsExecPath = async (bReCache) => {
       const sCommand = formatCommand(aExec.shift())
       // o.DesktopExe[sDesktop] = sExec
       // o.ExeDesktop[sExec] = sDesktop
-      // o.CommandDesktop[sCommand] = sDesktop
+      o.CommandDesktop[sCommand] = sDesktop
       o.DesktopCommand[sDesktop] = sCommand
     },
     12
@@ -125,13 +125,14 @@ const getWindows = async () => {
 
 const main = async ({
   superNumber = 0,
+  sCommand = undefined,
   windowIndex = 0,
   bLaunch = false,
   bIncrementWindowIndex = true,
   bReCache = false,
   attemptIndex = 0
 }) => {
-  if (attemptIndex > 2 || superNumber <= 0) {
+  if (attemptIndex > 2 || !(superNumber => 1 || sCommand)) {
     return
   }
   const [
@@ -146,11 +147,15 @@ const main = async ({
     sh(`xdotool getactivewindow`)
   ])
   const activeWID = Number(sh2.stdout.trim())
-  let foundAllCommands = true
+  let foundAllCommands = sCommand
+    ? execPaths.CommandDesktop[sCommand] !== undefined
+    : true
+
   const pinnedAsCommands = pinned.map((sDesktop) => {
     foundAllCommands = foundAllCommands && execPaths.DesktopCommand[sDesktop]
     return execPaths.DesktopCommand[sDesktop]
   })
+
   if (!foundAllCommands && !bReCache) {
     return main({
       superNumber,
@@ -189,7 +194,26 @@ const main = async ({
       activeIndex = [index, aWindowsSorted[index].length - 1]
     }
   })
-  let superIndex = superNumber - 1
+  let superIndex = -1
+  if (sCommand) {
+    superIndex = aWindowsSorted.findIndex((windowGroup) => {
+      return windowGroup.length > 0 && windowGroup[0].command === sCommand
+    })
+    if (superIndex === -1) {
+      await launch(execPaths.CommandDesktop[sCommand])
+      return main({
+        superNumber,
+        sCommand,
+        bLaunch: false,
+        bIncrementWindowIndex: false,
+        attemptIndex: attemptIndex + 1,
+        windowIndex
+      })
+    }
+  }
+  if (superNumber > 0) {
+    superIndex = superNumber - 1
+  }
   const notLaunched = aWindowsSorted[superIndex] === undefined
   if (bIncrementWindowIndex && pinned[superIndex] !== undefined && (bLaunch || notLaunched)) {
     windowIndex = notLaunched ? 0 : aWindowsSorted[superIndex].length
